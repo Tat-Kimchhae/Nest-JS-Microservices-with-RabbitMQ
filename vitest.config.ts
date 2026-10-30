@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     globals: true,
     root: './',
-    include: ['**/*.spec.ts'],
+    include: ['apps/{gateway,catalog,media,search}/src/**/*.spec.ts'],
+    exclude: ['**/*.e2e-spec.ts'],
   },
 });

@@ -6,7 +6,7 @@ import { UserContext } from './auth.types.js';
 export class AuthService {
   private readonly clerk = createClerkClient({
     secretKey: process.env.CLERK_SECRET_KEY,
-    publishableKey: process.env.CLERK_PUBLISHABLE_KEY,
+    publishableKey: process.env.CLERK_PUBLISHABLE_KEY || undefined,
   });
 
   private jwtVerifyOptions(): Record<string, any> {
@@ -20,7 +20,7 @@ export class AuthService {
       const verified: any = await verifyToken(token, this.jwtVerifyOptions());
 
       // decoded payload
-      const payload = verified?.payload ?? verified?.payload ?? verified;
+      const payload = verified?.payload ?? verified;
 
       // clerk user id -> payload.sub
       const clerkUserId = payload?.sub ?? payload?.userId;

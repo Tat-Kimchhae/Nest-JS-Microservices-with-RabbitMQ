@@ -17,11 +17,11 @@
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
+    "paths": {
+      "@app/rpc": ["./libs/rpc/index.ts"]
+    },
     "strictPropertyInitialization": false,
-    "types": [
-      "vitest/globals",
-      "node"
-    ]
+    "types": ["vitest/globals", "node", "multer"]
   },
   "files": [],
   "references": [

@@ -1,4 +1,4 @@
-import { Controller, Get, Injectable } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
 import { CurrentUser } from './current-user.decorator.js';
 import type { UserContext } from './auth.types.js';
