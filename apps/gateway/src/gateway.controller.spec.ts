@@ -1,22 +1,32 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { of } from 'rxjs';
 import { GatewayController } from './gateway.controller.js';
-import { GatewayService } from './gateway.service.js';
 
 describe('GatewayController', () => {
-  let gatewayController: GatewayController;
-
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
+  it('reports the health of its service clients', async () => {
+    const module = await Test.createTestingModule({
       controllers: [GatewayController],
-      providers: [GatewayService],
+      providers: [
+        {
+          provide: 'CATALOG_CLIENT',
+          useValue: { send: () => of({ status: true }) },
+        },
+        {
+          provide: 'MEDIA_CLIENT',
+          useValue: { send: () => of({ status: true }) },
+        },
+        {
+          provide: 'SEARCH_CLIENT',
+          useValue: { send: () => of({ status: true }) },
+        },
+      ],
     }).compile();
 
-    gatewayController = app.get<GatewayController>(GatewayController);
-  });
+    const controller = module.get(GatewayController);
+    const result = await controller.health();
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(gatewayController.getHello()).toBe('Hello World!');
-    });
+    expect(result.services.catalog.status).toBe(true);
+    expect(result.services.media.status).toBe(true);
+    expect(result.services.search.status).toBe(true);
   });
 });

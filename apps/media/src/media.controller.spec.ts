@@ -1,22 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { MediaController } from './media.controller.js';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test } from '@nestjs/testing';
 import { MediaService } from './media.service.js';
+import { Media } from './media.schema.js';
 
-describe('MediaController', () => {
-  let mediaController: MediaController;
-
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [MediaController],
-      providers: [MediaService],
+describe('MediaService', () => {
+  it('returns media ping status', async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        MediaService,
+        { provide: getModelToken(Media.name), useValue: {} },
+      ],
     }).compile();
 
-    mediaController = app.get<MediaController>(MediaController);
-  });
-
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(mediaController.getHello()).toBe('Hello World!');
-    });
+    expect(module.get(MediaService).ping().service).toBe('Media');
   });
 });

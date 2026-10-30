@@ -14,8 +14,6 @@ export class UsersService {
     email: string;
     name: string;
   }) {
-    const now = new Date();
-
     return this.userModel.findOneAndUpdate(
       {
         clerkUserId: input.clerkUserId,
@@ -24,7 +22,6 @@ export class UsersService {
         $set: {
           email: input.email,
           name: input.name,
-          lastSeenAt: now,
         },
         $setOnInsert: {
           role: 'user',

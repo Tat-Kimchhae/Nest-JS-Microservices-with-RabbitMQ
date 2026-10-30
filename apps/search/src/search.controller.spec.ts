@@ -1,22 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { SearchController } from './search.controller.js';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test } from '@nestjs/testing';
 import { SearchService } from './search.service.js';
+import { SearchProduct } from './search-product.schema.js';
 
-describe('SearchController', () => {
-  let searchController: SearchController;
-
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [SearchController],
-      providers: [SearchService],
+describe('SearchService', () => {
+  it('returns search ping status', async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        SearchService,
+        { provide: getModelToken(SearchProduct.name), useValue: {} },
+      ],
     }).compile();
 
-    searchController = app.get<SearchController>(SearchController);
-  });
-
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(searchController.getHello()).toBe('Hello World!');
-    });
+    expect(module.get(SearchService).ping().service).toBe('Search');
   });
 });

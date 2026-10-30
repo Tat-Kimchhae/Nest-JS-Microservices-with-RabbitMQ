@@ -1,22 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CatalogController } from './catalog.controller.js';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test } from '@nestjs/testing';
 import { CatalogService } from './catalog.service.js';
+import { Product } from './product.schema.js';
+import { ProductEventsPublisher } from './product-events.publisher.js';
 
-describe('CatalogController', () => {
-  let catalogController: CatalogController;
-
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [CatalogController],
-      providers: [CatalogService],
+describe('CatalogService', () => {
+  it('returns catalog ping status', async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        CatalogService,
+        { provide: getModelToken(Product.name), useValue: {} },
+        { provide: ProductEventsPublisher, useValue: {} },
+      ],
     }).compile();
 
-    catalogController = app.get<CatalogController>(CatalogController);
-  });
-
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(catalogController.getHello()).toBe('Hello World!');
-    });
+    expect(module.get(CatalogService).ping().service).toBe('Catalog');
   });
 });
